@@ -1,0 +1,416 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>WordPress Turku Meetup, 7.11.2019: Räätälöity WordPress-teemakehitys - Näin rakennat teeman aloitusteemasta</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="favicons/manifest.json">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/dude-2019.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai-sublime.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+
+<div class="reveal">
+
+  <a href="https://www.dude.fi"><svg style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;" width="80" height="80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#000101" stroke="#FFF" stroke-width="1.008" stroke-miterlimit="10" d="M0 0h1000v1000H0z"/><g fill="#FFF"><path d="M340.3 497.7c0 23.5-6.7 41.5-20.1 54s-32.7 18.8-58 18.8h-40.4V427.6h44.8c23.3 0 41.4 6.2 54.3 18.5s19.4 29.5 19.4 51.6zm-31.4.7c0-30.7-13.5-46-40.6-46h-16.1v93h13c29.1 0 43.7-15.6 43.7-47zM486.1 427.6V520c0 10.5-2.4 19.8-7.1 27.7-4.7 7.9-11.5 14-20.5 18.3-8.9 4.2-19.5 6.3-31.6 6.3-18.4 0-32.6-4.7-42.8-14.1-10.2-9.4-15.2-22.3-15.2-38.6v-92h30.2V515c0 11 2.2 19.1 6.6 24.2 4.4 5.1 11.8 7.7 22 7.7 9.9 0 17.1-2.6 21.5-7.8 4.5-5.2 6.7-13.3 6.7-24.4v-87.2h30.2zM633.5 497.7c0 23.5-6.7 41.5-20.1 54s-32.7 18.8-58 18.8H515V427.6h44.8c23.3 0 41.4 6.2 54.3 18.5s19.4 29.5 19.4 51.6zm-31.4.7c0-30.7-13.5-46-40.6-46h-16.1v93h13c29.1 0 43.7-15.6 43.7-47zM661.919 457.94v-30h116.2v30zM661.952 514.108v-30h116.2v30zM661.919 570.44v-30h116.2v30z"/></g></svg></a>
+
+  <div class="hashtag" style="position: fixed; bottom: 2rem; left: 2rem; z-index: 1000;">
+    <h4><a href="https://twitter.com/hashtag/wpfi?f=tweets&vertical=default&src=hash">#wpfi</a></h4>
+  </div>
+
+      <div class="slides">        
+        
+        <section data-markdown>
+          <script type="text/template">
+            # Räätälöity WordPress-teemakehitys
+
+            WordPress Turku Meetup, 7.11.2019<br />
+            <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://github.com/digitoimistodude/wpturku-theming-wp">slides.dude.fi/wpturku-theming-wp</a>
+
+            <div style="background-image: url('img/rolle-avatar.png'); background-size: cover; width: 64px; height: 64px; border-radius: 50%; display: block; margin: 0 auto ;margin-top: 6rem; margin-bottom: 1rem;"></div>
+            <p style="font-size: 1.8rem; color: #fff; opacity: .9; margin-bottom: .4rem;">Roni Laukkarinen</p>
+            <p style="font-size: 1.8rem; color: #fff; opacity: .5; margin-top: 0;">Digitoimisto Dude Oy<br />
+            WordPress Jyväskylä Meetup Organizer</p>
+          </script>
+        </section>
+
+        <section data-background-image="img/bicycle.gif" data-state="dimbg" data-transition="fade" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            # Miksi oma teema?    
+          </script>
+        </section>
+
+        <section style="text-align: left;" data-transition="fade" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Miksi oma teema?
+
+            <ul style="font-size: 3rem; list-style: none; margin: 0; padding: 0;">
+              <li class="fragment">- 100% hallinta: Tunnet oman koodisi parhaiten</li>
+              <li class="fragment">- "Maailman paras teema" juuri tietyn tyyppiseen käyttöön (!= "multipurpose")</li>
+              <li class="fragment">- Mahdollistaa lennossa optimoinnin (suorituskyky, saavutettavuus, jne.)</li>
+              <li class="fragment">- Jatkokehitettävyys</li>
+              <li class="fragment">- Ei turhaa bloattia</li>
+            </ul>
+
+            Notes:
+            - 1: Kun 90% koodista on omaasi, huomaat virheet helpommin ja kehityt nopeammin
+            - 1: Pahimmillaan isäntäteeman alle lapsiteeman kehittämisellä tai valmisteemoista tuunaamalla sivusto räjähtää useammin
+            - 1: Muiden teemojen koodisisältöä on vaikea arvioida
+            - (paina nuolta), 2: Kaikki teemat eivät sovi kaikkeen, etenkään "multipurpose"-teemat vaikka niin kovasti mainostavatkin
+            - (paina nuolta), 2: Omalla räätälöidyllä teemalla saa aikaan just mitä pitääkin, eikä mitään turhaa
+            - (paina nuolta), 3. Esimerkiksi saavutettavuus on asia, jota on nihkeä kehittää jälkikäteen, tukeutuu niin paljon siihen miten sivusto on ylipäätään rakennettu
+            - 3. Parempi testata suoraan.
+            - (paina nuolta), 4. Helpompi jatkokehittää
+            - (paina nuolta), 5: On kivempi lisätä juttuja kuin karsia niitä
+
+          </script>
+        </section>
+
+        <section style="text-align: left;" data-transition="fade" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Perinteisiä aloitusteemoja
+
+            <ul style="font-size: 3rem; list-style: none; margin: 0; padding: 0;">
+              <li>- underscores/_s <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://underscores.me/">https://underscores.me</a></li>
+              <li>- Understrap <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://understrap.com/">https://understrap.com</a></li>
+              <li>- Air-light <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://wordpress.org/themes/air-light">https://wordpress.org/themes/air-light</a></li>
+              <li>- aucor-starter <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://github.com/aucor/aucor-starter">https://github.com/aucor/aucor-starter</a></li>
+            </ul>
+
+            Notes:
+            - Underscores on ehkä käytetyin teema, mutta ei juurikaan sisällä tyylejä/CSS-pohjaa ("frameworkia"), eli valkoinen sivu josta työstämään, liian "tyhjä taulu"
+            - Understrap on ikäänkuin Bootstrapin ja underscoresin yhdistelmä. Jos bootstrapista tykkää, miksei, mutta itse koen senkin jo vähän turhan painavana, sama juttu Foundationin kanssa
+            - Air on meidän tekemä ja aucor-starter turkulaisen digitoimiston Aucorin vastaava, joka myös avointa lähdekoodia. Näissä lähtökohtana niin hyvä HTML/PHP-rakennekin kuin CSS-pohja starttia varten
+          </script>
+        </section>
+
+        <section style="text-align: left;" data-transition="fade" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Moderneja aloitusteemoja
+
+            <ul style="font-size: 3rem; list-style: none; margin: 0; padding: 0;">
+              <li>- Tonik <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://labs.tonik.pl/theme/">https://labs.tonik.pl/theme</a></li>
+              <li>- Sage <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://roots.io/sage">https://roots.io/sage</a></li>
+              <li>- Mythic <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://github.com/justintadlock/mythic">https://github.com/justintadlock/mythic</a></li>
+              <li>- dustpress <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://github.com/devgeniem/dustpress">https://github.com/devgeniem/dustpress</a></li>
+            </ul>
+
+            Notes:
+            - Viime vuosina on pyörinyt joitakin vähän monimutkaisempiakin teemoja
+            - Rootsin Sage yksi vanhimpia
+            - En tiedä onko "moderni" väärä sana, mutta kerron kohta lisää
+            - (Siirry seuraavaan koska siinä kysytään eroja)
+          </script>
+        </section>  
+
+        <section data-background-image="img/moderntimes.gif" data-state="dimbg" data-markdown>
+          <script type="text/template">
+            ## Modernin ja perinteisen ero?
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            #### Sage (moderni aloitusteema)
+
+            <img style="max-width: 900px; transform: translateY(-20px);" src="img/sage.png" alt="Sage" />
+
+            Notes:
+            - Rootsin Sage on ehkä ensimmäisiä moderneja
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            #### Tonik (moderni aloitusteema)
+
+            <img style="max-width: 900px; transform: translateY(-20px);" src="img/tonik.png" alt="Tonik" />
+
+            Notes:
+            - Tonik, Mythic ja esim. Dustpress kaikki koittavat uudistaa koko teemanrakennus-workflowta
+            - Eli teeman lisäksi on uusia työkaluja ja templating engineitä, esim. blade jolla kirjoitetaan ihan uudenlaista PHP:ta
+            - Sopii ohjelmoijaluonteille ja kikkailunhaluisille
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            #### Perinteiset startterit: aktivoi ja ala koodaamaan!
+
+            <img style="max-width: 900px; transform: translateY(-20px);" src="img/perinteiset-teemat.png" alt="Perinteiset starter-teemat, aucor-starter ja air-light" />
+
+            Notes:
+            - Itse fanitan perinteisiä starttereita (jonka pohjalta myös oma tehty) koska tuetaan tuttua kaavaa johon WordPressin 15-vuotinen suosiokin perustuu
+            - Ei tarvitse oikeastaan kuin aktivoida ja lähteä tekemään
+            - Gulpeja yms. ei ole pakko käyttää, mutta ne helpottavat elämää huomattavasti
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            #### air-light      
+
+            <a href="https://github.com/digitoimistodude/air-light"><img style="max-width: 900px;" src="img/air-light.jpg" alt="Air-light" /></a>
+
+            <ul style="font-size: 3rem; list-style: none; margin: 0; padding: 0;">
+              <li class="fragment">- Pohjautuu Automatticin underscoresiin</li>
+              <li class="fragment">- Jatkuvassa kehityksessä</li>
+              <li class="fragment">- Saavutettava, kielikäännettävä</li>
+              <li class="fragment">- Minimalistinen, ei bloattia</li>
+              <li class="fragment">- Multi-nav ja hamburger-mobiilinav-tuki</li>
+            </ul>      
+
+            Notes:
+            - Asenna githubista, älä WordPress.orgista
+            - Duden kehittämä
+            - Syntyprosessista jotain
+          </script>
+        </section>
+
+        <section style="text-align: left;" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## WordPress Theme Coding Standard
+            #### <a style="font-size: 2rem; color: #fff; opacity: .4; margin-bottom: 2rem;" href="https://codex.wordpress.org/Theme_Development#Theme_Development_Standards">https://codex.wordpress.org/Theme_Development#Theme_Development_Standards</a>          
+
+            <h3 class="fragment">Hyödyt</h3>
+
+            <ul>
+              <li class="fragment">Taaksepäinyhteensopivuus WordPress-versioiden kanssa</li>
+              <li class="fragment">Hyvät käytännöt</li>
+              <li class="fragment">Luettava koodi</li>
+              <li class="fragment">Helppo omaksuttavuus</li>
+              <li class="fragment">Avoin lähdekoodi ja vertaistuki</li>
+            </ul>
+
+            Notes:
+            - WordPressillä on olemassa omat standardit, jotka pyrkivät pitämään koodin yhdenmukaisena
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <img src="img/phpcs.png" alt="PHPcs-esimerkki" />
+
+            Notes:
+            - Lintterit ovat parasta nykyaikana
+            - Kertoo heti missä mokaa, tulee vähemmän virheitä
+            - Voi myös asettaa omia poikkeuksia jos ei tykkää natsimeiningistä
+            - Oppii koodaamaan "WordPressin tavoin"
+          </script>
+        </section>
+
+        <section data-background-image="img/juggler.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Joustava sisältö?
+
+            Notes:
+            - Nykyiaikainen teema on kenen tahansa helposti päivitettävissä
+            - Kun teet teemaa ei-tekniselle ihmiselle, kovakoodausta tulee välttää
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <img src="img/gutenberg-icon.jpg" alt="Gutenberg" style="max-width: 80px; height: auto;" />
+            <h3>Gutenberg</h3>
+            <h4><a style="font-size: 2rem; color: #fff; opacity: .4; margin-bottom: 2rem;" href="https://wordpress.org/gutenberg/">https://wordpress.org/gutenberg</a></h4>
+
+            <img src="img/gutenberg.gif" alt="Gutenberg" /> 
+
+            Notes:
+            - "Uudehko" lisäosa, jolla saa nykyään aikaan melko modulaarista sisältöä blokkien avulla
+            - Ei välttämättä teknisimmille toteutuksille, mutta hyvä esim. verkkolehdille ja blogeille
+            - Kuinka moni yleisöstä käyttää Gutenbergiä tuotannossa?
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <img src="img/acf-icon.jpg" alt="ACF" style="max-width: 80px; height: auto;" />
+            <h3>Advanced Custom Fields</h3>
+            <h4><a style="font-size: 2rem; color: #fff; opacity: .4; margin-bottom: 2rem;" href="https://www.advancedcustomfields.com">https://www.advancedcustomfields.com</a></h4>
+
+            <img src="img/acf.gif" alt="ACF" /> 
+
+            Notes:
+            - ACF lienee suosituin tapa tehdä räätälöityjä ja joustavia saitteja
+            - Kuinka moni yleisöstä käyttää ACF:ää tuotannossa?            
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <img src="img/acf-plus-gutenberg.png" alt="ACF + Gutenberg" style="max-height: 80px; width: auto;" />
+            <h3>ACF + Gutenberg</h3>
+            <h4><a style="font-size: 2rem; color: #fff; opacity: .4; margin-bottom: 2rem;" href="https://www.advancedcustomfields.com/blog/acf-5-8-introducing-acf-blocks-for-gutenberg">https://www.advancedcustomfields.com/blog/acf-5-8-introducing-acf-blocks-for-gutenberg</a></h4>
+
+            <img src="img/acf-gutenberg-tweet.png" alt="ACF + Gutenberg" /> 
+
+            Notes:
+            - EILEN, eli 15.10. ACF julkaisi tuen Gutenbergille, eli nyt voi hyötykäyttää molempia
+            - En ole testannut, mutta varteenotettava vaihtoehto
+          </script>
+        </section>
+
+        <section data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Teema starttiin!
+
+            <h3 style="margin-top: 5rem;">Tarvitset:</h3>
+
+            <div class="boxes boxes-two">
+
+              <div class="box">
+                <h3>Paikallinen kehitysympäristö</h3>
+                <h4>Vaihtoehtoja</h4>
+                <ul>
+                  <li>Local by Flywheel (helpoin käyttöliittymä) <a href="https://local.getflywheel.com/" style="font-size: 1.5rem; color: #fff; opacity: .4;">https://local.getflywheel.com/</a></li>
+                  <li>Vagrant <a href="https://github.com/digitoimistodude/marlin-vagrant" style="font-size: 1.5rem; color: #fff; opacity: .4;">https://github.com/digitoimistodude/marlin-vagrant</a></li>
+                  <li>Natiivi LEMP/LAMP/MAMP <a href="https://github.com/digitoimistodude/macos-lemp-setup" style="font-size: 1.5rem; color: #fff; opacity: .4;">https://github.com/digitoimistodude/macos-lemp-setup</a></li>
+                </ul>
+              </div>
+              <div class="box">
+                <h3>Teeman textdomainin korvaaminen omalla</h3>
+                <h4>Vaihtoehtoja</h4>
+                <ul>
+                  <li>Perinteinen etsi & korvaa <a href="https://github.com/Automattic/_s/#getting-started" style="font-size: 1.5rem; color: #fff; opacity: .4;">https://github.com/Automattic/_s/#getting-started</a></li>
+                  <li>Starttiscripti <a style="font-size: 1.5rem; color: #fff; opacity: .4;" href="https://github.com/digitoimistodude/air-light#installation">https://github.com/digitoimistodude/air-light#installation</a></li>
+                </ul>
+              </div>
+
+            </div>
+
+            Notes:
+            - Merkityksellisintä teemakehityksessä on kehitysympäristö ja työkalut, mutta en lähde niitä tässä enempää avaamaan
+            - Linkit löytyy slidestä
+            - Local by Flywheelin saa myös Windowsille, mutta suosittelen Maccia devaamiseen
+            - Underscoresissa on suorat ohjeet miten search ja replace toimii, mutta heillä on myös nettisivuilla helppokäyttöinen teemanlatain, johon voi laittaa haluamansa nimen ja teema nimetään sen mukaisesti
+            - Textdomain "nimeää" teeman ja sen kaikki ominaisuudet ja stringit niin että ne on käännettäviä ja uniikkeja
+            - Ehdottoman tärkeää kun lähtee tekemään omaa räätälöityä teemaa, ettei esim. päivitykset yliaja teemaa
+            - Prefix everything!
+          </script>
+        </section>
+
+
+        <section data-background-image="img/thinking.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Mitä pitää ottaa huomioon?   
+          </script>
+        </section>
+
+        <section data-background-image="img/thinking.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <h3>Saavutettavuus</h3>
+            <h4><a href="https://github.com/pa11y/pa11y-ci" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">pa11y-ci</a>, <a style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;" href="https://chrome.google.com/webstore/detail/axe/lhdoppojpmngadmnindnejefpokejbdd">aXe for Chrome</a></h4>
+
+            <img src="img/axe-screenshot.png" alt="aXe-lisäosa saavutettavuustestaukseen" /> 
+
+            Notes:
+            - Testaa saavutettavuus samalla kun teet!
+            - Tee hyvää HTML:ää
+          </script>
+        </section>
+
+        <section data-background-image="img/thinking.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <h3>Responsiivisuus</h3>
+            <h4><a href="https://github.com/pa11y/pa11y-ci" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">browserSync</a></h4>
+
+            <img src="img/responsiivisuus.gif" alt="Kuva useasta älypuhelimesta ja laitteesta, joiden ruudut päivittyvät browserSyncin avulla" /> 
+
+            Notes:
+            - Responsiivisuushan on jo peruskauraa ja tätä päivää, mutta hyvä pitää mielessä että tekee senkin samalla kun tekee, eikä jälkeenpäin
+          </script>
+        </section>
+
+        <section data-background-image="img/thinking.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            <h3>Luettava ja virheetön koodi, lintterit</h3>
+            <h4><a href="https://github.com/morishitter/stylefmt" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">stylefmt</a>, <a href="https://github.com/sds/scss-lint" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">scss-lint</a>, <a href="https://github.com/sds/scss-lint" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">phpcs</a>, <a href="https://github.com/center-key/gulp-w3c-html-validator" style="font-size: 2rem; color: #fff; opacity: .5; margin-bottom: 2rem;">gulp-w3c-html-validation</a> + muut gulp-pluginit</h4>
+
+            <img src="img/linters.png" alt="Kuva useasta älypuhelimesta ja laitteesta, joiden ruudut päivittyvät browserSyncin avulla" /> 
+
+            Notes:
+            - Käteviä olla sekä gulpissa/gruntissa/task-toolissa mutta sen lisäksi myös editorissa
+          </script>
+        </section>
+
+        <section data-background-image="img/livekoodaus.gif" data-state="dimbg" data-markdown data-separator-notes="^Notes:">
+
+          <script type="text/template">
+            ## Livekoodausta? demoefektiä?
+
+            Notes:
+            - Paina pistettä (.) niin saat pauselle esityksen
+          </script>
+        </section>
+
+        <section data-background-image="img/rolle-bg-2018.jpg" style="text-align: left" data-markdown data-separator-notes="^Notes:">
+          <script type="text/template">
+            ## Kiitos!
+
+            Roni Laukkarinen<br />
+            CTO, perustaja, Digitoimisto Dude Oy<br />
+            WordPress Jyväskylä Meetup Organizer
+            <br />                
+
+            <a style="font-size: 3rem; color: #fff; opacity: .4;" href="https://github.com/digitoimistodude/wpturku-theming-wp">slides.dude.fi/wpturku-theming-wp</a>
+
+            <a style="text-shadow: none; box-shadow: none;" href="https://twitter.com/rolle" aria-label="Rollen twitter"><svg style="position: relative; top: 5px;" fill="#1da1f2" aria-labelledby="simpleicons-twitter-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><title id="simpleicons-twitter-icon">Twitter icon</title><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg> <span style="color: #1da1f2"><span style="font-weight: 300">@</span>rolle</span><br />
+            
+            <a style="text-shadow: none; box-shadow: none;" href="https://wordpressfi-slackin.herokuapp.com" aria-label="Suomenkielinen WordPress-yhteisö Slackissa"><svg style="position: relative; top: 5px;" width="32" height="32" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><path d="M165.964 15.838c-3.89-11.975-16.752-18.528-28.725-14.636-11.975 3.89-18.528 16.752-14.636 28.725l58.947 181.365c4.048 11.187 16.132 17.473 27.732 14.135 12.1-3.483 19.475-16.334 15.614-28.217L165.964 15.838" fill="#DFA22F"/><path d="M74.626 45.516C70.734 33.542 57.873 26.989 45.9 30.879 33.924 34.77 27.37 47.631 31.263 59.606l58.948 181.366c4.047 11.186 16.132 17.473 27.732 14.132 12.099-3.481 19.474-16.332 15.613-28.217L74.626 45.516" fill="#3CB187"/><path d="M240.162 166.045c11.975-3.89 18.526-16.75 14.636-28.726-3.89-11.973-16.752-18.527-28.725-14.636L44.708 181.632c-11.187 4.046-17.473 16.13-14.135 27.73 3.483 12.099 16.334 19.475 28.217 15.614l181.372-58.93" fill="#CE1E5B"/><path d="M82.508 217.27l43.347-14.084-14.086-43.352-43.35 14.09 14.089 43.347" fill="#392538"/><path d="M173.847 187.591c16.388-5.323 31.62-10.273 43.348-14.084l-14.088-43.36-43.35 14.09 14.09 43.354" fill="#BB242A"/><path d="M210.484 74.706c11.974-3.89 18.527-16.751 14.637-28.727-3.89-11.973-16.752-18.526-28.727-14.636L15.028 90.293C3.842 94.337-2.445 106.422.896 118.022c3.481 12.098 16.332 19.474 28.217 15.613l181.371-58.93" fill="#72C5CD"/><path d="M52.822 125.933c11.805-3.836 27.025-8.782 43.354-14.086-5.323-16.39-10.273-31.622-14.084-43.352l-43.36 14.092 14.09 43.346" fill="#248C73"/><path d="M144.16 96.256l43.356-14.088a546179.21 546179.21 0 0 0-14.089-43.36L130.07 52.9l14.09 43.356" fill="#62803A"/></svg> <span style="color: #72c5ce"><span style="font-weight: 300">@</span>rolle</span><br />
+          
+            <a style="text-shadow: none; box-shadow: none;" href="https://profiles.wordpress.org/rolle" aria-label="Rollen WordPress-profiili"><svg style="position: relative; top: 5px; margin-right: 5px;" aria-labelledby="simpleicons-wordpress-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#21759b"><title id="simpleicons-wordpress-icon">WordPress icon</title><path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/></svg> <span style="color: #21759b"><span style="font-weight: 300"></span>rolle</span><br />
+
+            <a style="text-shadow: none; box-shadow: none;" href="https://github.com/ronilaukkarinen" aria-label="Rollen GitHub"><svg style="margin-right: 5px; position: relative; top: 5px;" width="32" height="32" fill="#fff" aria-labelledby="simpleicons-github-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill=""><title id="simpleicons-github-icon">GitHub icon</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg> <span style="color: #fff;">ronilaukkarinen</span></a>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        history: false,
+        mouseWheel: false,
+        center: true,
+        touch: true,
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        transitionSpeed: 'slow', // default/fast/slow
+        hideAddressBar: true,
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
